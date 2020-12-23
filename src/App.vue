@@ -4,7 +4,9 @@
     <nav-bar></nav-bar>
 
     <div class="container">
-      <router-view id="content" :key="$route.path" class="mt-3"></router-view>
+      <transition name="fade" mode="out-in">
+        <router-view id="content" :key="$route.path" class="mt-3"></router-view>
+      </transition>
     </div>
 
     <page-footer></page-footer>
@@ -31,6 +33,14 @@ ul {
 .bottom-links {
   margin-top: 3rem;
   font-weight: bold;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
 </style>
