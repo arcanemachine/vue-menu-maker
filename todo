@@ -1,10 +1,6 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- setup vue-router
-  - commit
-- setup vuex
-  - commit
 - setup bootstrap-vue
   - commit
 

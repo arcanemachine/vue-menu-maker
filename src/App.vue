@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
+    <router-view :key="$route.path"></router-view>
     <HelloWorld :msg="$store.getters.helloWorld"/>
   </div>
 </template>
