@@ -16,6 +16,11 @@ const routes = [
     name: 'restaurantList',
     component: () => import ('../views/RestaurantList.vue')
   },
+  {
+    path: '*',
+    name: '404',
+    component: () => import ('../views/_404.vue')
+  },
 ]
 
 const router = new VueRouter({
