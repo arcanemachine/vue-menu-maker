@@ -1,16 +1,5 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- create home page
-  - navbar 
-  - title
-  - "View restaurants"
-    - 
-
-- routes
-  - restaurants/
-    - ListView
-  - restaurants/:restaurantSlug/
-    - fetch api info:
-      - restaurant name
-      - menus
+- add transitions
+- pull restaurants from API
