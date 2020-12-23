@@ -1,0 +1,17 @@
+
+*** PROPER COMMIT HYGIENE ***
+
+- setup vue-router
+  - commit
+- setup vuex
+  - commit
+- setup bootstrap-vue
+  - commit
+
+- routes
+  - restaurants/
+    - ListView
+  - restaurants/:restaurantSlug/
+    - fetch api info:
+      - restaurant name
+      - menus
