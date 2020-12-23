@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+
+    <b-navbar variant="primary" type="dark">
+      <b-navbar-brand>Hello World!</b-navbar-brand>
+    </b-navbar>
+
     <img alt="Vue logo" src="./assets/logo.png">
     <router-view :key="$route.path"></router-view>
     <HelloWorld :msg="$store.getters.helloWorld"/>
@@ -24,6 +29,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

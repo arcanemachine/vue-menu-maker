@@ -1,8 +1,11 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- setup bootstrap-vue
-  - commit
+- create home page
+  - navbar 
+  - title
+  - "View restaurants"
+    - 
 
 - routes
   - restaurants/
