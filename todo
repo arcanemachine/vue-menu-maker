@@ -1,5 +1,18 @@
 
 *** PROPER COMMIT HYGIENE ***
 
+- add login
+  - save logged-in user info
+- add user registration
+
+- add loading animation
+  - gray overlay over page
+  - spinning wheel animation
+
+- add 404
+
 - add transitions
+
 - pull restaurants from API
+
+- password reset
