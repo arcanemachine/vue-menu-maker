@@ -5,12 +5,45 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-		userLoggedIn: false,
+		userLoggedIn: undefined,
+		userToken: undefined,
 		loginUrl: 'http://192.168.1.120:8000/api/v1/rest-auth/login/'
   },
-  getters:{
+  getters: {
     loginUrl (state) {
       return state.loginUrl;
+    },
+    userLoggedIn (state) {
+      return state.userLoggedIn;
+    },
+    userToken (state) {
+      return state.userToken;
+    }
+  },
+  mutations: {
+    userLoggedIn (state, bool) {
+      state.userLoggedIn = bool;
+    },
+    userToken (state, token) {
+      state.userToken = token;
+    }
+  },
+  actions: {
+    getUserLoginStatus (context) {
+      if (localStorage.getItem('apiToken')) {
+        context.commit('userLoggedIn', true);
+        context.commit('userToken', localStorage.getItem('apiToken'));
+      }
+    },
+    userLogin (context, token) {
+      localStorage.setItem('apiToken', token);
+      context.commit('userLoggedIn', true);
+      context.commit('userToken', token);
+    },
+    userLogout (context) {
+      localStorage.removeItem('apiToken');
+      context.commit('userLoggedIn', undefined);
+      context.commit('userToken', undefined);
     }
   }
 })

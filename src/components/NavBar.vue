@@ -6,9 +6,18 @@
     </b-link>
 
     <!-- Login/Registration -->
-    <b-navbar-nav class="ml-auto">
-      <b-nav-item :to="{name: 'login'}">Login</b-nav-item>
-    </b-navbar-nav>
+    <transition-group mode="out-in" class="d-inline ml-auto">
+
+      <b-navbar-nav v-if="$store.getters.userLoggedIn" key="logged-in" class="ml-auto">
+        <b-nav-item :to="{name: 'logout'}" class="active">Logout</b-nav-item>
+      </b-navbar-nav>
+
+      <b-navbar-nav v-if="!$store.getters.userLoggedIn" key="logged-out">
+        <b-nav-item :to="{name: 'register'}" class="active">Register</b-nav-item>
+        <b-nav-item :to="{name: 'login'}" class="active">Login</b-nav-item>
+      </b-navbar-nav>
+
+    </transition-group>
 
   </b-navbar>
 </template>

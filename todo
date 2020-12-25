@@ -1,11 +1,8 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- add login
-  - add loading animation
-    - spinning wheel animation
-      - fix animation: successful login after bad login doesn't yield proper results
-  - save logged-in user info
+- fix navbar animation jerk when transitioning between logged-in and logged-out state
+
 - add user registration
 
 - add 404

@@ -4,7 +4,7 @@
     <nav-bar></nav-bar>
 
     <div class="container">
-      <transition name="fade" mode="out-in">
+      <transition mode="out-in">
         <router-view id="content" :key="$route.path" class="mt-3"></router-view>
       </transition>
     </div>
@@ -20,7 +20,15 @@ import PageFooter from './components/PageFooter.vue'
 
 export default {
   name: 'App',
-  components: { NavBar, PageFooter }
+  components: { NavBar, PageFooter },
+  methods: {
+    getUserLoginStatus() {
+      this.$store.dispatch('getUserLoginStatus');
+    }
+  },
+  mounted() {
+    this.$nextTick(() => this.getUserLoginStatus())
+  }
 }
 </script>
 
@@ -35,12 +43,16 @@ ul {
   font-weight: bold;
 }
 
-.fade-enter-active, .fade-leave-active {
+.v-enter-active, .v-leave-active {
   transition: opacity 0.33s ease;
 }
 
-.fade-enter, .fade-leave-to {
+.v-enter, .v-leave-to {
   opacity: 0;
+}
+
+.v-move {
+  height: 0;
 }
 
 </style>

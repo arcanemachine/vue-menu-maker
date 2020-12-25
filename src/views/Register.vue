@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center">Login</h1>
+    <h1 class="text-center">Register New User</h1>
 
     <b-card class="w-50 mt-5 bg-light ml-auto mr-auto">
       <b-form @submit="onSubmit">
@@ -60,10 +60,15 @@ export default {
       postData: {},
     }
   },
+  computed: {
+    loginStatusImgSrc() {
+      return '../assets/loading.svg';
+    }
+  },
   methods: {
     onSubmit(event) {
-      event.preventDefault();
-      this.login();
+      event.preventDefault()
+      this.login()
     },
     login() {
       let url = this.$store.getters.loginUrl;
