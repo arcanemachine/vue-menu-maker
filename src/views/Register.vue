@@ -7,15 +7,28 @@
 
         <b-form-group id="username"
                       label="Username:"
-                      label-for="input-username">
+                      label-for="input-username"
+                      :description="usernameHelpText">
           <b-form-input id="input-username"
                         v-model="form.username"
+                        @keyup="checkUsername()"
                         required>
           </b-form-input>
         </b-form-group>
 
         <b-form-group id="password"
                       label="Password:"
+                      label-for="input-password"
+                      class="mt-5">
+          <b-form-input id="input-password"
+                        v-model="form.password"
+                        type="password"
+                        required>
+          </b-form-input>
+        </b-form-group>
+
+        <b-form-group id="password"
+                      label="Confirm password:"
                       label-for="input-password">
           <b-form-input id="input-password"
                         v-model="form.password"
@@ -33,9 +46,9 @@
                     class="ml-2">Cancel</b-button>
 
           <transition-group mode="out-in">
-            <img v-if="loginStatus === 'loading'" key="loading" src="../assets/loading.svg" alt="Page Loading" class="login-status-icon rotate" />
-            <img v-else-if="loginStatus === 'success'" key="success" src="../assets/success.svg" alt="Login Success" class="login-status-icon" />
-            <img v-else-if="loginStatus === 'fail'" key="fail" src="../assets/fail.svg" alt="Login Failed" class="login-status-icon" />
+            <img v-if="remoteStatus === 'loading'" key="loading" src="../assets/loading.svg" alt="Page Loading" class="login-status-icon rotate" />
+            <img v-else-if="remoteStatus === 'success'" key="success" src="../assets/success.svg" alt="Login Success" class="login-status-icon" />
+            <img v-else-if="remoteStatus === 'fail'" key="fail" src="../assets/fail.svg" alt="Login Failed" class="login-status-icon" />
           </transition-group>
 
         </div>
@@ -43,36 +56,49 @@
       </b-form>
     </b-card>
 
+    <div class="deleteme text-center mt-4">
+    </div>
+
 
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Home',
   data() {
     return {
-      loginStatus: undefined,
+      remoteStatus: undefined,
+
       form: {
         'username': '',
-        'password': '',
+        'email': '',
+        'password1': '',
+        'password2': '',
       },
+
+      usernameHelpText: '',
+      timeout: undefined,
+
       postData: {},
     }
   },
-  computed: {
-    loginStatusImgSrc() {
-      return '../assets/loading.svg';
-    }
-  },
   methods: {
+    checkUsername() {
+      clearTimeout(this.timeout);
+      this.usernameHelpText = '';
+      this.timeout = setTimeout(() => {
+        this.usernameHelpText = 'world';
+      }, 1000);
+    },
     onSubmit(event) {
       event.preventDefault()
-      this.login()
+      this.register()
     },
     login() {
       let url = this.$store.getters.loginUrl;
-      this.loginStatus = 'loading';
+      this.remoteStatus = 'loading';
 
       fetch(url, {
         method: 'POST',
@@ -85,22 +111,22 @@ export default {
       .then(data => {
         this.postData = data;
         if ('key' in this.postData) {
-          this.loginStatus = 'success';
+          this.remoteStatus = 'success';
           this.$store.dispatch('userLogin', this.postData.key);
           this.$router.push({name: 'home'});
         } else {
-          this.loginStatus = 'fail';
+          this.remoteStatus = 'fail';
         }
       });
 
     },
-    loginStatusToggle() {
-      if (!this.loginStatus || this.loginStatus === 'fail') {
-        this.loginStatus = 'loading';
-      } else if (this.loginStatus === 'loading') {
-        this.loginStatus = 'success';
+    remoteStatusToggle() {
+      if (!this.remoteStatus || this.remoteStatus === 'fail') {
+        this.remoteStatus = 'loading';
+      } else if (this.remoteStatus === 'loading') {
+        this.remoteStatus = 'success';
       } else {
-        this.loginStatus = 'fail';
+        this.remoteStatus = 'fail';
       }
     }
   }

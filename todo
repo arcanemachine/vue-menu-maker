@@ -1,11 +1,12 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- fix navbar animation jerk when transitioning between logged-in and logged-out state
-
 - add user registration
+  - check username availability
+    - after typing delay
+  - check email availability
 
-- add 404
+- convert loading images to spinners/icons
 
 - add transitions
 
