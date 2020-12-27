@@ -7,13 +7,15 @@
 
         <b-form-group id="username"
                       label="Username:"
-                      label-for="input-username"
-                      :description="usernameHelpText">
+                      label-for="input-username">
           <b-form-input id="input-username"
                         v-model="form.username"
                         @keyup="checkUsername()"
                         required>
           </b-form-input>
+          <transition mode="out-in">
+            <small v-if="usernameHelpText" :class="usernameHelpTextClass">{{ usernameHelpText }}</small>
+          </transition>
         </b-form-group>
 
         <b-form-group id="password"
@@ -72,25 +74,42 @@ export default {
       remoteStatus: undefined,
 
       form: {
-        'username': '',
-        'email': '',
-        'password1': '',
-        'password2': '',
+        "username": "",
+        "email": "",
+        "password1": "",
+        "password2": "",
       },
 
-      usernameHelpText: '',
+      usernameHelpText: 'Enter your desired username',
+      usernameHelpTextClass: {"text-muted": true},
       timeout: undefined,
 
       postData: {},
+
+    }
+  },
+  computed: {
+    dUrl() {
+      return 'http://192.168.1.120:8000/api/v1/users/is-username-available/' + this.form.username + '/';
     }
   },
   methods: {
     checkUsername() {
+      let myUrl = this.dUrl;
       clearTimeout(this.timeout);
       this.usernameHelpText = '';
       this.timeout = setTimeout(() => {
-        this.usernameHelpText = 'world';
-      }, 1000);
+        fetch(myUrl)
+          .then(response => response.json()) // delete this line
+          .then(data => {
+            if (data.isUsernameAvailable === true) {
+              this.usernameHelpText = 'This username is available';
+              this.usernameHelpTextClass = {'text-success': true};
+            } else {
+              this.usernameHelpText = 'This username is taken';
+            }
+          })
+      }, 750);
     },
     onSubmit(event) {
       event.preventDefault()
@@ -118,7 +137,6 @@ export default {
           this.remoteStatus = 'fail';
         }
       });
-
     },
     remoteStatusToggle() {
       if (!this.remoteStatus || this.remoteStatus === 'fail') {
