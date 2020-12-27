@@ -2,9 +2,11 @@
 *** PROPER COMMIT HYGIENE ***
 
 - add user registration
-  - check username availability
-    - after typing delay
-  - check email availability
+  - send user registration info
+
+- confirm new user via email
+
+- test!
 
 - convert loading images to spinners/icons
 

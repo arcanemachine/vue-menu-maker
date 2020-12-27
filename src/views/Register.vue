@@ -10,20 +10,36 @@
                       label-for="input-username">
           <b-form-input id="input-username"
                         v-model="form.username"
-                        @keyup="checkUsername()"
+                        @keyup="usernameCheck()"
+                        :style="usernameFormInputStyle"
+                        required>
+          </b-form-input>
+          <transition>
+            <small v-show="usernameHelpText" :class="usernameHelpTextClass" mode="out-in">{{ usernameHelpText }}</small>
+          </transition>
+        </b-form-group>
+
+        <b-form-group id="email"
+                      label="Email:"
+                      label-for="input-email"
+                      type="email">
+          <b-form-input id="input-email"
+                        v-model="form.email"
+                        @keyup="emailCheck()"
+                        :style="emailFormInputStyle"
                         required>
           </b-form-input>
           <transition mode="out-in">
-            <small v-if="usernameHelpText" :class="usernameHelpTextClass">{{ usernameHelpText }}</small>
+            <small v-show="emailHelpText" :class="emailHelpTextClass" mode="out-in">{{ emailHelpText }}</small>
           </transition>
         </b-form-group>
 
         <b-form-group id="password"
                       label="Password:"
-                      label-for="input-password"
-                      class="mt-5">
+                      label-for="input-password">
           <b-form-input id="input-password"
-                        v-model="form.password"
+                        v-model="form.password1"
+                        @keyup="passwordCheck()"
                         type="password"
                         required>
           </b-form-input>
@@ -33,16 +49,21 @@
                       label="Confirm password:"
                       label-for="input-password">
           <b-form-input id="input-password"
-                        v-model="form.password"
+                        v-model="form.password2"
                         type="password"
+                        @keyup="passwordCheck()"
+                        :style="passwordFormInputStyle"
                         required>
           </b-form-input>
+          <transition mode="out-in">
+            <small v-show="passwordHelpText" :class="passwordHelpTextClass" mode="out-in">{{ passwordHelpText }}</small>
+          </transition>
         </b-form-group>
 
-        <div class="mt-4">
+        <div>
 
           <b-button type="submit"
-                    variant="primary">Login</b-button>
+                    variant="primary">Register</b-button>
           <b-button @click="$router.go(-1)"
                     variant="secondary"
                     class="ml-2">Cancel</b-button>
@@ -80,36 +101,120 @@ export default {
         "password2": "",
       },
 
-      usernameHelpText: 'Enter your desired username',
-      usernameHelpTextClass: {"text-muted": true},
-      timeout: undefined,
+      usernameFormInputStyle: {"margin-bottom": "2.5em"},
+      usernameHelpText: '',
+      usernameHelpTextClass: {
+        "text-muted": true,
+      },
+      usernameTimeout: undefined,
+
+      emailFormInputStyle: {"margin-bottom": "2.5em"},
+      emailHelpText: '',
+      emailHelpTextClass: {
+        "text-muted": true,
+      },
+      emailTimeout: undefined,
+
+      passwordFormInputStyle: {"margin-bottom": "2.5em"},
+      passwordHelpText: '',
+      passwordHelpTextClass: {
+        "text-muted": true,
+      },
+      passwordTimeout: undefined,
 
       postData: {},
 
     }
   },
   computed: {
-    dUrl() {
-      return 'http://192.168.1.120:8000/api/v1/users/is-username-available/' + this.form.username + '/';
-    }
   },
   methods: {
-    checkUsername() {
-      let myUrl = this.dUrl;
-      clearTimeout(this.timeout);
+    usernameCheck() {
+      let myUrl = 'http://192.168.1.120:8000/api/v1/users/is-username-available/' + this.form.username + '/';
+
+      clearTimeout(this.usernameTimeout);
       this.usernameHelpText = '';
-      this.timeout = setTimeout(() => {
+      this.usernameFormInputStyle = {"margin-bottom": "2.5em"};
+      if (!this.form.username) {return false;} // do not continue if form empty
+
+      this.usernameTimeout = setTimeout(() => {
         fetch(myUrl)
-          .then(response => response.json()) // delete this line
+          .then(response => response.json())
           .then(data => {
             if (data.isUsernameAvailable === true) {
+              this.usernameFormInputStyle = {};
               this.usernameHelpText = 'This username is available';
               this.usernameHelpTextClass = {'text-success': true};
             } else {
-              this.usernameHelpText = 'This username is taken';
+              this.usernameFormInputStyle = {};
+              this.usernameHelpText = 'This username is not available';
+              this.usernameHelpTextClass = {'text-danger': true};
             }
           })
       }, 750);
+    },
+    emailIsValid(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    },
+    emailCheck() {
+      let myUrl = 'http://192.168.1.120:8000/api/v1/users/is-email-available/' + this.form.email + '/';
+
+      clearTimeout(this.emailTimeout);
+      this.emailHelpText = '';
+      this.emailFormInputStyle = {"margin-bottom": "2.5em"};
+      if (!this.form.email) {return false;} // do not continue if form empty
+
+      this.emailTimeout = setTimeout(() => {
+        if (!this.emailIsValid(this.form.email)) {
+          this.emailFormInputStyle = {};
+          this.emailHelpText = 'Please enter a valid email address';
+          this.emailHelpTextClass = {'text-danger': true};
+          return false;
+        }
+        fetch(myUrl)
+          .then(response => response.json())
+          .then(data => {
+            if (data.isEmailAvailable === true) {
+              this.emailFormInputStyle = {};
+              this.emailHelpText = 'This email address is available';
+              this.emailHelpTextClass = {'text-success': true};
+            } else {
+              this.emailFormInputStyle = {};
+              this.emailHelpText = 'This email address is not available';
+              this.emailHelpTextClass = {'text-danger': true};
+            }
+          })
+      }, 750);
+    },
+    passwordCheck() {
+      clearTimeout(this.passwordTimeout);
+
+      this.passwordHelpText = '';
+      this.passwordFormInputStyle = {"margin-bottom": "2.5em"};
+      if (!this.form.password1 || !this.form.password2) {return false;}
+
+      // password is too short
+      if (this.form.password1.length < 8) {
+        this.passwordFormInputStyle = {};
+        this.passwordHelpText = 'Password must be at least 8 characters long';
+        this.passwordHelpTextClass = {'text-danger': true};
+        return false;
+      }
+
+      this.passwordTimeout = setTimeout(() => {
+        if (this.form.password1 === this.form.password2) {
+
+          // password is weak
+          this.passwordFormInputStyle = {};
+          this.passwordHelpText = 'Passwords match';
+          this.passwordHelpTextClass = {'text-success': true};
+        } else {
+          // passwords do not match
+          this.passwordFormInputStyle = {};
+          this.passwordHelpText = 'Passwords do not match';
+          this.passwordHelpTextClass = {'text-danger': true};
+        }
+      }, 750)
     },
     onSubmit(event) {
       event.preventDefault()
