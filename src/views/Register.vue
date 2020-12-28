@@ -130,7 +130,6 @@ export default {
   },
   methods: {
     usernameCheck() {
-      let checkUrl = this.$store.getters.urls.isUsernameAvailable(this.form.username);
 
       clearTimeout(this.usernameTimeout);
       this.usernameHelpText = '';
@@ -138,17 +137,18 @@ export default {
       if (!this.form.username) {return false;} // do not continue if form empty
 
       this.usernameTimeout = setTimeout(() => {
+        let checkUrl = this.$helpers.urls.isUsernameAvailable(this.form.username);
         fetch(checkUrl)
           .then(response => response.json())
           .then(data => {
             if (data.isUsernameAvailable === true) {
               this.usernameFormInputStyle = {};
               this.usernameHelpText = 'This username is available';
-              this.usernameHelpTextClass = {'text-success': true};
+              this.usernameHelpTextClass = ['text-success'];
             } else {
               this.usernameFormInputStyle = {};
               this.usernameHelpText = 'This username is not available';
-              this.usernameHelpTextClass = {'text-danger': true};
+              this.usernameHelpTextClass = ['text-danger'];
             }
           })
       }, 750);
@@ -157,33 +157,36 @@ export default {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     },
     emailCheck() {
-      let checkUrl = this.$store.getters.urls.isEmailAvailable(this.form.email);
-
       clearTimeout(this.emailTimeout);
       this.emailHelpText = '';
       this.emailFormInputStyle = {"margin-bottom": "2.5em"};
       if (!this.form.email) {return false;} // do not continue if form empty
 
       this.emailTimeout = setTimeout(() => {
+
         if (!this.emailIsValid(this.form.email)) {
           this.emailFormInputStyle = {};
           this.emailHelpText = 'Please enter a valid email address';
-          this.emailHelpTextClass = {'text-danger': true};
+          this.emailHelpTextClass = ['text-danger'];
           return false;
         }
+
+        let checkUrl = this.$helpers.urls.isEmailAvailable(this.form.email);
         fetch(checkUrl)
           .then(response => response.json())
           .then(data => {
+            console.log(data);
             if (data.isEmailAvailable === true) {
               this.emailFormInputStyle = {};
               this.emailHelpText = 'This email address is available';
-              this.emailHelpTextClass = {'text-success': true};
+              this.emailHelpTextClass = ['text-success'];
             } else {
               this.emailFormInputStyle = {};
               this.emailHelpText = 'This email address is not available';
-              this.emailHelpTextClass = {'text-danger': true};
+              this.emailHelpTextClass = ['text-danger'];
             }
           })
+
       }, 750);
     },
     passwordCheck() {

@@ -3,7 +3,6 @@
 
     <nav-bar></nav-bar>
 
-    {{ $helpers.helloWorld }}
     <div class="container">
       <transition mode="out-in">
         <router-view id="content" :key="$route.path" class="mt-3"></router-view>

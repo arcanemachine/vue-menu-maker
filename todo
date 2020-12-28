@@ -1,7 +1,6 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- move urls to own file
 - add user registration
   - send user registration info
 

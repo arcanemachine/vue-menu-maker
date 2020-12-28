@@ -9,9 +9,6 @@ export default new Vuex.Store({
 		userToken: undefined
   },
   getters: {
-    loginUrl (state) {
-      return state.loginUrl;
-    },
     userLoggedIn (state) {
       return state.userLoggedIn;
     },
