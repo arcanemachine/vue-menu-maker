@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     usernameCheck() {
-      let myUrl = 'http://192.168.1.120:8000/api/v1/users/is-username-available/' + this.form.username + '/';
+      let checkUrl = this.$store.getters.urls.isUsernameAvailable(this.form.username);
 
       clearTimeout(this.usernameTimeout);
       this.usernameHelpText = '';
@@ -138,7 +138,7 @@ export default {
       if (!this.form.username) {return false;} // do not continue if form empty
 
       this.usernameTimeout = setTimeout(() => {
-        fetch(myUrl)
+        fetch(checkUrl)
           .then(response => response.json())
           .then(data => {
             if (data.isUsernameAvailable === true) {
@@ -157,7 +157,7 @@ export default {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     },
     emailCheck() {
-      let myUrl = 'http://192.168.1.120:8000/api/v1/users/is-email-available/' + this.form.email + '/';
+      let checkUrl = this.$store.getters.urls.isEmailAvailable(this.form.email);
 
       clearTimeout(this.emailTimeout);
       this.emailHelpText = '';
@@ -171,7 +171,7 @@ export default {
           this.emailHelpTextClass = {'text-danger': true};
           return false;
         }
-        fetch(myUrl)
+        fetch(checkUrl)
           .then(response => response.json())
           .then(data => {
             if (data.isEmailAvailable === true) {

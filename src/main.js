@@ -4,6 +4,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import * as helpers from './assets/js/helpers.js'
+Vue.prototype.$helpers = helpers;
+
 // BootstrapVue
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 Vue.use(BootstrapVue)

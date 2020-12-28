@@ -1,17 +1,21 @@
 
 *** PROPER COMMIT HYGIENE ***
 
+- move urls to own file
 - add user registration
   - send user registration info
 
 - confirm new user via email
-
-- test!
+  - registration success component
 
 - convert loading images to spinners/icons
+  - delete images or move to assets/img/
 
 - add transitions
 
 - pull restaurants from API
 
 - password reset
+
+- test
+- vuetify

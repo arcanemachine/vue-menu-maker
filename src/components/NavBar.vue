@@ -1,5 +1,5 @@
 <template>
-  <b-navbar variant="danger" type="dark">
+  <b-navbar variant="danger" type="dark" class="navbar-main">
 
     <b-link :to="{name: 'home'}">
       <b-navbar-brand>Menu Maker</b-navbar-brand>
@@ -24,4 +24,9 @@ export default {
 }
 </script>
 
+<style>
+.navbar-main {
+  background-color: #DD2222;
+}
+</style>
 
