@@ -56,8 +56,7 @@ export default {
       form: {
         'username': '',
         'password': '',
-      },
-      postData: {},
+      }
     }
   },
   methods: {
@@ -66,7 +65,7 @@ export default {
       this.login();
     },
     login() {
-      let url = this.$store.getters.loginUrl;
+      let url = this.$helpers.urls.login;
       this.loginStatus = 'loading';
 
       fetch(url, {
@@ -78,10 +77,9 @@ export default {
       })
       .then(response => this.postResponse = response.json())
       .then(data => {
-        this.postData = data;
-        if ('key' in this.postData) {
+        if ('key' in data) {
           this.loginStatus = 'success';
-          this.$store.dispatch('userLogin', this.postData.key);
+          this.$store.dispatch('userLogin', data.key);
           this.$router.push({name: 'home'});
         } else {
           this.loginStatus = 'fail';

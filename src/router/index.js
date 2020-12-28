@@ -17,6 +17,17 @@ const routes = [
     component: () => import ('../views/Register.vue')
   },
   {
+    path: '/register/success',
+    name: 'registerSuccess',
+    component: () => import ('../views/RegisterSuccess.vue')
+  },
+  {
+    path: '/register/confirm-email/:confirmToken',
+    name: 'registerConfirm',
+    component: () => import ('../views/RegisterConfirm.vue'),
+    props: true
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import ('../views/Login.vue')

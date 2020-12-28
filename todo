@@ -1,11 +1,7 @@
 
 *** PROPER COMMIT HYGIENE ***
 
-- add user registration
-  - send user registration info
-
-- confirm new user via email
-  - registration success component
+- handle api authentication (Django?)
 
 - convert loading images to spinners/icons
   - delete images or move to assets/img/

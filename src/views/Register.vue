@@ -62,8 +62,7 @@
 
         <div>
 
-          <b-button type="submit"
-                    variant="primary">Register</b-button>
+          <b-button type="submit" variant="primary">Register</b-button>
           <b-button @click="$router.go(-1)"
                     variant="secondary"
                     class="ml-2">Cancel</b-button>
@@ -78,10 +77,6 @@
 
       </b-form>
     </b-card>
-
-    <div class="deleteme text-center mt-4">
-    </div>
-
 
   </div>
 </template>
@@ -122,11 +117,7 @@ export default {
       },
       passwordTimeout: undefined,
 
-      postData: {},
-
     }
-  },
-  computed: {
   },
   methods: {
     usernameCheck() {
@@ -175,7 +166,6 @@ export default {
         fetch(checkUrl)
           .then(response => response.json())
           .then(data => {
-            console.log(data);
             if (data.isEmailAvailable === true) {
               this.emailFormInputStyle = {};
               this.emailHelpText = 'This email address is available';
@@ -217,30 +207,33 @@ export default {
           this.passwordHelpText = 'Passwords do not match';
           this.passwordHelpTextClass = {'text-danger': true};
         }
-      }, 750)
+      }, 400)
     },
     onSubmit(event) {
-      event.preventDefault()
-      this.register()
+      event.preventDefault();
+      this.register();
     },
-    login() {
-      let url = this.$store.getters.loginUrl;
+    register() {
       this.remoteStatus = 'loading';
 
-      fetch(url, {
+      let registerUrl = this.$helpers.urls.register;
+      fetch(registerUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(this.form)
       })
-      .then(response => this.postResponse = response.json())
+      .then(response => response.json())
       .then(data => {
-        this.postData = data;
-        if ('key' in this.postData) {
+        if ('key' in data) {
           this.remoteStatus = 'success';
-          this.$store.dispatch('userLogin', this.postData.key);
-          this.$router.push({name: 'home'});
+          this.$router.push({
+            name: 'registerSuccess',
+            params: {
+              'email': this.form.email
+            }
+          });
         } else {
           this.remoteStatus = 'fail';
         }
